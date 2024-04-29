@@ -4,9 +4,9 @@ const AmizadesDAO = require('../models/dao/amizadesDAO');
 class AmizadesController {
   // Cria uma nova amizade (CREATE)
   create(req, res) {
-    let nome = req.body.nome;
+    let amigos = req.body.amigos;
 
-    let amizade = new Amizade({nome});
+    let amizade = new Amizade({amigos});
     let amizadeId = AmizadesDAO.criar(amizade);
 
     // Faz o response para o browser
@@ -20,12 +20,13 @@ class AmizadesController {
   list(req, res) {
     // Copia o array de amizades
     let listaAmizades = AmizadesDAO.listar().slice();
-
+    
     // Faz o response para o browser
     if (listaAmizades.length === 0)
       res.status(200).json({ message: "Nenhuma amizade encontrada" });
     else
       res.status(200).json({ amizades: listaAmizades });
+
   }
 
   // Mostrar uma amizade (READ)

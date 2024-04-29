@@ -4,9 +4,8 @@ const Amizade = require("../amizade");
 // Vetor de Amizades
 let amizades = [
   // Altere aqui para suas amizades
-  new Amizade({ id: 1, nome: "Cleber mata gado"}),
-  new Amizade({ id: 2, nome: "Xaulin matador de porco"}),
-  new Amizade({ id: 3, nome: "Armando Pinto" }),
+  new Amizade({ id: 1, amigos: [1, 2] }),
+  
 ];
 
 class AmizadesDAO {

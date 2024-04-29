@@ -1,7 +1,7 @@
 class Amizade {
-  constructor({ id, nome}) {
+  constructor({ id, amigos}) {
     this.id = id ? id : -1;
-    this.nome = nome;
+    this.amigos = amigos;
   }
 }
 

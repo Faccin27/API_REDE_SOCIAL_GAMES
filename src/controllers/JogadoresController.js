@@ -9,6 +9,7 @@ class JogadoresController {
     let nome = req.body.nome;
 
     let jogador = new Jogador({ nickName, nome });
+    
     let jogadorId = JogadoresDAO.criar(jogador);
 
     // Faz o response para o browser
