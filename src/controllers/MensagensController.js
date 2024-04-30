@@ -42,16 +42,17 @@ class MensagensController {
       res.status(200).json({ mensagens: listaMensagens });
   }
 
-  // Mostra uma mensagem (READ)
-  show(req, res) {
-    let id = req.params.id;
-    let mensagem = MensagensDAO.buscarPorId(parseInt(id));
+// Mostrar uma mensagem (READ)
+show(req, res) {
+  let id = req.params.id;
+  let mensagem = MensagensDAO.buscarPorId(parseInt(id));
 
-    if (mensagem)
-      res.status(200).json({ mensagem });
-    else
-      res.status(404).json({ message: 'Mensagem não encontrada' });
-  }
+  if (mensagem)
+    res.status(200).json({ mensagem: mensagem.verbose() });
+  else
+    res.status(404).json({ message: 'Mensagem não encontrada' });
+}
+
 
   // Atualiza uma mensagem (UPDATE)
   update(req, res) {

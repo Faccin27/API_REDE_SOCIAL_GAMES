@@ -32,13 +32,17 @@ class PartidasController {
   show(req, res) {
     let id = req.params.id;
     let partida = PartidasDAO.buscarPorId(parseInt(id));
-
-    // Faz o response para o browser
+  
     if (partida) {
-      res.status(200).json({ partida: partida });
+      // Cria uma nova variável que recebe a versão verbosa da partida
+      let partidaVerbose = partida.verbose();
+      // Faz o response para o browser
+      res.status(200).json({ partida: partidaVerbose });
     } else {
+      // Faz o response para o browser
       res.status(404).json({ message: 'Partida não encontrada' });
     }
+  
   }
 
   // Atualizar uma partida (UPDATE) - Não implementado neste exemplo
