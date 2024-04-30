@@ -36,16 +36,30 @@ class AmizadesController {
 
     // Faz o response para o browser
     if (amizade) {
-      res.status(200).json({ amizade: amizade });
+      res.status(200).json({ amizade: amizade.verbose() });
     } else {
       res.status(404).json({ message: 'Amizade não encontrada' });
     }
   }
 
-  // Atualizar uma amizade (UPDATE) - Não implementado neste exemplo
-  update(req, res) {
-    res.status(405).json({ message: "Atualização de amizade não permitida" });
+ // Atualizar uma amizade (UPDATE)
+update(req, res) {
+  let id = req.params.id;
+  let amizade = AmizadesDAO.buscarPorId(parseInt(id));
+  if (amizade) {
+    // Verifica se há dados de amizade na requisição
+    if (req.body.amigos !== undefined) amizade.amigos = req.body.amigos;
+
+    // Atualiza a amizade na persistência
+    AmizadesDAO.atualizar(id, amizade);
+
+    // Faz o response para o browser
+    res.status(200).json({ amizade: amizade });
+  } else {
+    // Faz o response para o browser
+    res.status(404).json({ message: 'Amizade não encontrada' });
   }
+}
 
   // Deletar uma amizade (DELETE)
   delete(req, res) {

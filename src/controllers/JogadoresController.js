@@ -24,7 +24,7 @@ class JogadoresController {
     // Busca o parâmetro na URL
     let nomeSearch = req.query.nomeSearch;
     let nickSearch = req.query.nickSearch;
-
+    
     // Copia o array jogadores
     let listaJogadores = JogadoresDAO.listar().slice()
 

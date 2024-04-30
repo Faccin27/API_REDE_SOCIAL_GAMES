@@ -13,4 +13,12 @@ router.use('/conquistas', conquistasRoutes);
 const estatisticasRoutes = require('./estatisticasRoutes');
 router.use('/estatisticas', estatisticasRoutes);
 
+const amizadesRoutes = require('./amizadeRoutes');
+router.use('/amizades', amizadesRoutes);
+
+const partidasRoutes = require('./partidasRoutes');
+router.use('/partidas', partidasRoutes);
+
+const mensagensRoutes = require("./mensagemRoutes");
+router.use('/mensagens', mensagensRoutes);
 module.exports = router;
