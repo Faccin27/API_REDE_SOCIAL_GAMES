@@ -1,19 +1,28 @@
 const Partida = require("../models/partida");
 const PartidasDAO = require('../models/dao/PartidasDAO');
+const JogadoresController = require("../controllers/JogadoresController");
+const estatisticajs = require("../models/estatistica")
 
 class PartidasController {
   // Cria uma nova partida (CREATE)
   create(req, res) {
     let nome = req.body.nome;
+    let jogadoresVencedores = req.body.jogadoresVencedores; 
 
     let partida = new Partida({nome});
     let partidaId = PartidasDAO.criar(partida);
 
-    // Faz o response para o browser
-    if (partidaId)
+    if (partidaId) {
+      // Para cada jogador vencedor, chama a função partidaGanha
+      jogadoresVencedores.forEach(jogadorId => {
+        // Chama a função partidaGanha com o ID do jogador vencedor
+        partidaGanha(jogadorId);
+      });
+
       res.status(201).json({ partida: PartidasDAO.buscarPorId(partidaId) });
-    else
+    } else {
       res.status(500).json({ message: "Não foi possível criar uma partida" });
+    }
   }
 
   // Lista todas as partidas (READ)

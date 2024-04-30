@@ -1,4 +1,4 @@
-const Jogador = require('./Jogador'); // Importe a classe Jogador, se necessário
+const Jogador = require('./jogador'); // Importe a classe Jogador, se necessário
 const JogadorDAO = require('../models/dao/JogadoresDAO'); // Importe o DAO de Jogador, se necessário
 
 class Amizade {
