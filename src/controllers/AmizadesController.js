@@ -24,9 +24,17 @@ class AmizadesController {
     // Faz o response para o browser
     if (listaAmizades.length === 0)
       res.status(200).json({ message: "Nenhuma amizade encontrada" });
-    else
-      res.status(200).json({ amizades: listaAmizades });
-
+    else {
+      // Verifica se há uma ID de jogador na requisição
+      const jogadorId = req.query.jogadorId;
+      if (jogadorId) {
+        // Retorna apenas os amigos do jogador especificado
+        const amigosDoJogador = this.listarAmigosPorId(jogadorId);
+        res.status(200).json({ amigos: amigosDoJogador });
+      } else {
+        res.status(200).json({ amizades: listaAmizades });
+      }
+    }
   }
 
   // Mostrar uma amizade (READ)
@@ -42,24 +50,24 @@ class AmizadesController {
     }
   }
 
- // Atualizar uma amizade (UPDATE)
-update(req, res) {
-  let id = req.params.id;
-  let amizade = AmizadesDAO.buscarPorId(parseInt(id));
-  if (amizade) {
-    // Verifica se há dados de amizade na requisição
-    if (req.body.amigos !== undefined) amizade.amigos = req.body.amigos;
+  // Atualizar uma amizade (UPDATE)
+  update(req, res) {
+    let id = req.params.id;
+    let amizade = AmizadesDAO.buscarPorId(parseInt(id));
+    if (amizade) {
+      // Verifica se há dados de amizade na requisição
+      if (req.body.amigos !== undefined) amizade.amigos = req.body.amigos;
 
-    // Atualiza a amizade na persistência
-    AmizadesDAO.atualizar(id, amizade);
+      // Atualiza a amizade na persistência
+      AmizadesDAO.atualizar(id, amizade);
 
-    // Faz o response para o browser
-    res.status(200).json({ amizade: amizade });
-  } else {
-    // Faz o response para o browser
-    res.status(404).json({ message: 'Amizade não encontrada' });
+      // Faz o response para o browser
+      res.status(200).json({ amizade: amizade });
+    } else {
+      // Faz o response para o browser
+      res.status(404).json({ message: 'Amizade não encontrada' });
+    }
   }
-}
 
   // Deletar uma amizade (DELETE)
   delete(req, res) {
@@ -75,6 +83,22 @@ update(req, res) {
       // Faz o response para o browser
       res.status(404).json({ message: 'Amizade não encontrada' });
     }
+  }
+
+  // Método para listar todos os amigos de um jogador por sua ID
+  listarAmigosPorId(jogadorId) {
+    // Filtra a lista de amizades para encontrar todas as amizades do jogador
+    const amizadesDoJogador = AmizadesDAO.listar().filter(amizade =>
+      amizade.jogador1Id === jogadorId || amizade.jogador2Id === jogadorId
+    );
+
+    // Extrai os IDs de todos os amigos do jogador
+    const idsDosAmigos = amizadesDoJogador.flatMap(amizade =>
+      amizade.jogador1Id === jogadorId ? amizade.jogador2Id : amizade.jogador1Id
+    );
+
+    // Retorna os IDs dos amigos do jogador
+    return idsDosAmigos;
   }
 }
 
