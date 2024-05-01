@@ -8,18 +8,20 @@ class Partida {
     this.mvp = mvp;
   }
 
-  //  detalhada da partida
   verbose() {
-    //para não influenciar na DB
     let partida = JSON.parse(JSON.stringify(this)); // Cópia profunda do objeto partida
 
     // Consulta ao JogadorDAO para buscar informações sobre o MVP da partida
-    partida.mvp = JogadorDAO.buscarPorId(partida.mvp).principal();
+    let mvpJogador = JogadorDAO.buscarPorId(partida.mvp);
+    if (mvpJogador) {
+      partida.mvp = mvpJogador.principal();
+    } else {
+      partida.mvp = null; // ou qualquer outro valor que você deseje usar para representar que o jogador não foi encontrado
+    }
 
     return partida;
   }
 
-  // smplificada da partida
   principal() {
     return {
       id: this.id,
@@ -30,4 +32,4 @@ class Partida {
   }
 }
 
-module.exports = Partida; 
+module.exports = Partida;

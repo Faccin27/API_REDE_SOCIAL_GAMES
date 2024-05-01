@@ -4,7 +4,7 @@ const Amizade = require("../amizade");
 // Vetor de Amizades
 let amizades = [
   // Altere aqui para suas amizades
-  new Amizade({ id: 1, amigos: [1, 2] }),
+  new Amizade({ id: 1, amigos: [1, 5] }),
   new Amizade({ id: 2, amigos: [3, 4] }),
   new Amizade({ id: 3, amigos: [2, 5] }),
   new Amizade({ id: 4, amigos: [1, 3] }),

@@ -8,6 +8,7 @@ class PartidasController {
   create(req, res) {
     let nome = req.body.nome;
     let jogadoresVencedores = req.body.jogadoresVencedores; 
+    let jogadoresPerdedores = req.body.jogadoresPerdedores;
 
     let partida = new Partida({nome});
     let partidaId = PartidasDAO.criar(partida);
@@ -19,6 +20,12 @@ class PartidasController {
         partidaGanha(jogadorId);
       });
 
+      // para cada jogador perdedor, chama funcao partidaPerdida
+      jogadoresPerdedores.forEach(jogadorId => {
+        // chama funcao com id do jogador
+        partidaPerdida(jogadorId)
+      });
+
       res.status(201).json({ partida: PartidasDAO.buscarPorId(partidaId) });
     } else {
       res.status(500).json({ message: "Não foi possível criar uma partida" });
@@ -27,14 +34,21 @@ class PartidasController {
 
   // Lista todas as partidas (READ)
   list(req, res) {
-    // Copia o array de partidas
-    let listaPartidas = PartidasDAO.listar().slice();
+    // Copia o array de amizades
+    let listaAmizades = AmizadesDAO.listar().slice();
+    
 
-    // Faz o response para o browser
-    if (listaPartidas.length === 0)
-      res.status(200).json({ message: "Nenhuma partida encontrada" });
-    else
-      res.status(200).json({ partidas: listaPartidas });
+    if (listaAmizades.length === 0)
+      res.status(200).json({ message: "Nenhuma amizade encontrada" });
+    else {
+      const jogadorId = req.query.jogadorId;
+      if (jogadorId) {
+        const amigosDoJogador = this.listarAmigosPorId(jogadorId);
+        res.status(200).json({ amigos: amigosDoJogador });
+      } else {
+        res.status(200).json({ amizades: listaAmizades });
+      }
+    }
   }
 
   // Mostrar uma partida (READ)
