@@ -1,5 +1,5 @@
 const Amizade = require("../models/amizade");
-const AmizadesDAO = require('../models/dao/amizadesDAO');
+const AmizadesDAO = require('../models/dao/AmizadesDAO');
 
 class AmizadesController {
   // Cria uma nova amizade (CREATE)
@@ -16,26 +16,29 @@ class AmizadesController {
       res.status(500).json({ message: "Não foi possível criar uma amizade" });
   }
 
-  // Lista todas as amizades (READ)
-  list(req, res) {
-    // Copia o array de amizades
-    let listaAmizades = AmizadesDAO.listar().slice();
-    
-    // Faz o response para o browser
-    if (listaAmizades.length === 0)
-      res.status(200).json({ message: "Nenhuma amizade encontrada" });
-    else {
-      // Verifica se há uma ID de jogador na requisição
-      const jogadorId = req.query.jogadorId;
-      if (jogadorId) {
-        // Retorna apenas os amigos do jogador especificado
-        const amigosDoJogador = this.listarAmigosPorId(jogadorId);
-        res.status(200).json({ amigos: amigosDoJogador });
-      } else {
-        res.status(200).json({ amizades: listaAmizades });
-      }
+// Lista todas as amizades (READ)
+list(req, res) {
+  // Copia o array de amizades
+  let listaAmizades = AmizadesDAO.listar().slice();
+  
+  // Faz o response para o browser
+  if (listaAmizades.length === 0) {
+    res.status(200).json({ message: "Nenhuma amizade encontrada" });
+  } else {
+    // Verifica se há uma ID de jogador na requisição
+    const jogadorId = req.query.jogadorId;
+    if (jogadorId) {
+      // Retorna apenas os amigos do jogador especificado
+      const amigosDoJogador = this.listarAmigosPorId(jogadorId);
+      res.status(200).json({ amigos: amigosDoJogador });
+    } else {
+      // Retorna a lista de amizades com os detalhes dos amigos
+      const amizadesVerbose = listaAmizades.map(amizade => amizade.verbose());
+      res.status(200).json({ amizades: amizadesVerbose });
     }
   }
+}
+
 
   // Mostrar uma amizade (READ)
   show(req, res) {
@@ -89,12 +92,12 @@ class AmizadesController {
   listarAmigosPorId(jogadorId) {
     // Filtra a lista de amizades para encontrar todas as amizades do jogador
     const amizadesDoJogador = AmizadesDAO.listar().filter(amizade =>
-      amizade.jogador1Id === jogadorId || amizade.jogador2Id === jogadorId
+      amizade.amigos.includes(jogadorId)
     );
 
     // Extrai os IDs de todos os amigos do jogador
     const idsDosAmigos = amizadesDoJogador.flatMap(amizade =>
-      amizade.jogador1Id === jogadorId ? amizade.jogador2Id : amizade.jogador1Id
+      amizade.amigos.filter(amigoId => amigoId !== jogadorId)
     );
 
     // Retorna os IDs dos amigos do jogador

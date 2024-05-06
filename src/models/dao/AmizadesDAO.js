@@ -1,4 +1,3 @@
-// models/dao/amizadesDAO.js
 const Amizade = require("../amizade");
 
 // Vetor de Amizades
@@ -48,6 +47,15 @@ class AmizadesDAO {
     if (index !== -1) {
       amizades.splice(index, 1);
     }
+  }
+
+  // Lista os amigos de um jogador pelo ID
+  listarAmigosPorIdJogador(idJogador) {
+    let amigos = [];
+    amizades.forEach(amizade => {
+      amigos = amigos.concat(amizade.filtrarAmigosPorId(idJogador));
+    });
+    return amigos;
   }
 }
 

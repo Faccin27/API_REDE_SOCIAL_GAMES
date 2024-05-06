@@ -14,7 +14,7 @@ class ClassificacoesController {
   }
 
   // Atualiza a classificação dos jogadores pela pontuação das suas estatísticas
-  calculaClassificacao() {
+  calculaClassificacao(req, res) {
     let jogadores = JogadoresDAO.listar();
 
     // Atualiza a classificação de cada jogador com base em suas estatísticas
@@ -25,7 +25,7 @@ class ClassificacoesController {
     });
 
     // Retorna uma mensagem de sucesso ou qualquer outro tratamento desejado
-    return "Classificação atualizada com sucesso!";
+    res.status(200).json({ message: "Classificação atualizada com sucesso!" });
   }
 }
 

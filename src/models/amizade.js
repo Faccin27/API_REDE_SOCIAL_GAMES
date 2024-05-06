@@ -1,4 +1,3 @@
-const Jogador = require('./jogador'); // Importe a classe Jogador, se necessário
 const JogadorDAO = require('../models/dao/JogadoresDAO'); // Importe o DAO de Jogador, se necessário
 
 class Amizade {
@@ -26,7 +25,7 @@ class Amizade {
 
   principal() {
     let amigosVerbose = []
-    for(i = 0; i > this.amigos.length; i++){
+    for(let i = 0; i < this.amigos.length; i++){ // Corrigido o operador de comparação
       let jogadorVerbose = JogadorDAO.buscarPorId(this.amigos[i]).principal()
       amigosVerbose.push(jogadorVerbose)
     }
@@ -35,6 +34,11 @@ class Amizade {
       amigos: amigosVerbose
     };
     return amizade;
+  }
+
+  // Método para filtrar os amigos de um jogador pelo ID
+  filtrarAmigosPorId(jogadorId) {
+    return this.amigos.filter(amigoId => amigoId === jogadorId);
   }
 }
 

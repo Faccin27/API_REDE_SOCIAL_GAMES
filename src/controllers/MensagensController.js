@@ -18,15 +18,14 @@ class MensagensController {
       res.status(500).json({ message: "Não foi possível criar a mensagem" });
   }
 
-  // Lista todas as mensagens (READ)
   list(req, res) {
-    // Busca o parâmetro na URL
+    // Busca os parâmetros na URL
     let id_remetente = req.query.id_remetente;
     let id_destinatario = req.query.id_destinatario;
- 
+  
     // Copia o array de mensagens
     let listaMensagens = MensagensDAO.listar().slice();
-
+  
     // Filtra os resultados se houver alguma query
     if (id_remetente) {
       listaMensagens = listaMensagens.filter(mensagem => mensagem.id_remetente === parseInt(id_remetente));
@@ -34,13 +33,17 @@ class MensagensController {
     if (id_destinatario) {
       listaMensagens = listaMensagens.filter(mensagem => mensagem.id_destinatario === parseInt(id_destinatario));
     }
-
+  
+    // Verbose para cada mensagem
+    listaMensagens = listaMensagens.map(mensagem => mensagem.verbose());
+  
     // Faz o response para o browser
     if (listaMensagens.length === 0)
       res.status(200).json({ message: "Nenhuma mensagem encontrada" });
     else
       res.status(200).json({ mensagens: listaMensagens });
   }
+  
 
 // Mostrar uma mensagem (READ)
 show(req, res) {

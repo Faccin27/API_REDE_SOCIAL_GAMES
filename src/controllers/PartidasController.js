@@ -1,7 +1,8 @@
 const Partida = require("../models/partida");
 const PartidasDAO = require('../models/dao/PartidasDAO');
 const JogadoresController = require("../controllers/JogadoresController");
-const estatisticajs = require("../models/estatistica")
+const EstatisticasDAO = require("../models/dao/EstatisticasDAO");
+const JogadoresDAO = require("../models/dao/JogadoresDAO");
 
 class PartidasController {
   // Cria uma nova partida (CREATE)
@@ -14,17 +15,23 @@ class PartidasController {
     let partidaId = PartidasDAO.criar(partida);
 
     if (partidaId) {
-      // Para cada jogador vencedor, chama a função partidaGanha
-      jogadoresVencedores.forEach(jogadorId => {
-        // Chama a função partidaGanha com o ID do jogador vencedor
-        partidaGanha(jogadorId);
-      });
+      for (let index = 0; index < jogadoresVencedores.length; index++) {
+        let jogador = JogadoresDAO.buscarPorId(jogadoresVencedores[index])
+        let estatisticas = EstatisticasDAO.buscarPorId(jogador.estatistica)
+         // Para cada jogador vencedor, chama a função partidaGanha
+        estatisticas.partidaGanha();
+      }
+     
 
-      // para cada jogador perdedor, chama funcao partidaPerdida
-      jogadoresPerdedores.forEach(jogadorId => {
-        // chama funcao com id do jogador
-        partidaPerdida(jogadorId)
-      });
+
+      if(partidaId){
+        for (let index = 0; index < jogadoresPerdedores.length; index++) {
+          let jogador = JogadoresDAO.buscarPorId(jogadoresPerdedores[index])
+          let estatisticas = EstatisticasDAO.buscarPorId(jogador.estatistica)
+           // Para cada jogador vencedor, chama a função partidaGanha
+          estatisticas.partidaPerdida();
+      }
+    }
 
       res.status(201).json({ partida: PartidasDAO.buscarPorId(partidaId) });
     } else {
