@@ -1,6 +1,7 @@
 const Jogador = require("../models/jogador")
 const JogadoresDAO = require('../models/dao/JogadoresDAO');
 const EstatisticasDAO = require("../models/dao/EstatisticasDAO");
+const res = require("express/lib/response");
 
 class JogadoresController {
   // Cria um novo jogador (CREATE)
@@ -51,6 +52,27 @@ class JogadoresController {
       }
       res.status(200).json({ jogadores: listaJogadoresVerbose })
     }
+  }
+
+  listarTopJogadores(req, res) {
+    // Ordena os jogadores pelo valor da classificação em ordem decrescente
+    const jogadoresOrdenados = JogadoresDAO.listar().slice().sort((a, b) => a.classificacao - b.classificacao);
+
+    // Limita a lista aos 10 primeiros jogadores
+    const top10Jogadores = jogadoresOrdenados.slice(0, 10);  // recorta entre 0 e 10
+
+    const listaTopJogadores = [];
+    for (let i = 0; i < top10Jogadores.length; i++) {
+      const jogador = top10Jogadores[i];
+      listaTopJogadores.push({
+        id: jogador.id,
+        nickName: jogador.nickName,
+        classificacao: jogador.classificacao,
+        pontuacao: jogador.estatisticas 
+      });
+    }
+
+    res.status(200).json({top10: listaTopJogadores});
   }
 
   // Mostrar um jogador (READ)
@@ -110,14 +132,16 @@ class JogadoresController {
     }
   }
 
-  // Lista classificação ordenada dos 10 primeiros jogadores
-  listaClassificacao(req, res) {
-
-  }
-
-  // Atualiza a classificação dos jogadores pela ponduação das suas estatisticas
-  calculaClassificacao() {
-
+  calculaClassificacao(){
+        
+        const jogadoresOrdenados = JogadoresDAO.listar().sort((a, b) => b.pontuacao - a.pontuacao);
+    
+        
+        for (let i = 0; i < jogadoresOrdenados.length; i++) {
+            jogadoresOrdenados[i].classificacao = i + 1;
+        }
+        
+        return jogadoresOrdenados;
   }
 }
 

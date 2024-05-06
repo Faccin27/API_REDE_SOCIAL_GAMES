@@ -1,5 +1,6 @@
 const JogadoresController = require("../controllers/JogadoresController");
 
+
 class Estatisticas {
   constructor({ id, pontuacao, jogosJogados, jogosVencidos, jogosPerdidos }) {
     this.id = id ? id : -1;
@@ -28,6 +29,8 @@ class Estatisticas {
     
     // Verificar se a pontuação é negativa e ajustar para 0 se for o caso
     this.pontuacao = Math.max(0, pontuacao);
+    JogadoresController.calculaClassificacao();
+    
   }
 }
 

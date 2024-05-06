@@ -19,6 +19,9 @@ router.use('/amizades', amizadesRoutes);
 const partidasRoutes = require('./partidasRoutes');
 router.use('/partidas', partidasRoutes);
 
+const classificacoesRoutes = require('./classificacoesRoutes');
+router.use('/classificacoes', classificacoesRoutes);
+
 const mensagensRoutes = require("./mensagemRoutes");
 router.use('/mensagens', mensagensRoutes);
 module.exports = router;

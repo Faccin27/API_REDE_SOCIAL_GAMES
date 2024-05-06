@@ -29,6 +29,7 @@ class EstatisticasDAO {
   criar(estatistica) {
     estatistica.id = estatisticas[estatisticas.length - 1].id + 1;
     estatisticas.push(estatistica);
+    jogadoresController.calculaClassificacao();
     return parseInt(estatistica.id);
   }
 

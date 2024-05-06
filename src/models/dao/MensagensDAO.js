@@ -1,4 +1,6 @@
+const { calculaClassificacao } = require("../../controllers/JogadoresController");
 const Mensagem = require("../mensagem");
+const JogadoresController = require('../../controllers/JogadoresController')
 
 // Vetor de Mensagens
 let mensagens = [
@@ -23,7 +25,9 @@ class MensagensDAO {
     mensagem.id = mensagens.length > 0 ? mensagens[mensagens.length - 1].id + 1 : 1;
     mensagem.data_hora = new Date(); // Definindo a data e hora atuais
     mensagens.push(mensagem);
+    JogadoresController.calculaClassificacao();
     return mensagem.id;
+
   }
 
   // Atualiza uma mensagem
