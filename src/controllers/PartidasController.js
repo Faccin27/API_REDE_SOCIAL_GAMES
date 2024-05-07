@@ -8,26 +8,26 @@ class PartidasController {
   // Cria uma nova partida (CREATE)
   create(req, res) {
     let nome = req.body.nome;
-    let jogadoresVencedores = req.body.jogadoresVencedores; 
-    let jogadoresPerdedores = req.body.jogadoresPerdedores;
+    let jogadoresVencedores = req.body.timeVencedor; 
+    let jogadoresPerdedores = req.body.timePerdedor;
 
     let partida = new Partida({nome});
     let partidaId = PartidasDAO.criar(partida);
 
     if (partidaId) {
+      console.log(jogadoresVencedores);
       for (let index = 0; index < jogadoresVencedores.length; index++) {
         let jogador = JogadoresDAO.buscarPorId(jogadoresVencedores[index])
-        let estatisticas = EstatisticasDAO.buscarPorId(jogador.estatistica)
+        console.log(jogadoresVencedores[index])
+        let estatisticas = EstatisticasDAO.buscarPorId(jogador.estatisticas)
          // Para cada jogador vencedor, chama a função partidaGanha
         estatisticas.partidaGanha();
       }
-     
-
 
       if(partidaId){
         for (let index = 0; index < jogadoresPerdedores.length; index++) {
           let jogador = JogadoresDAO.buscarPorId(jogadoresPerdedores[index])
-          let estatisticas = EstatisticasDAO.buscarPorId(jogador.estatistica)
+          let estatisticas = EstatisticasDAO.buscarPorId(jogador.estatisticas)
            // Para cada jogador vencedor, chama a função partidaGanha
           estatisticas.partidaPerdida();
       }
