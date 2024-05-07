@@ -27,10 +27,23 @@ class Estatisticas {
     // Calcular a pontuação
     let pontuacao = (this.jogosVencidos * 10) - (this.jogosPerdidos * 5);
     
+    
     // Verificar se a pontuação é negativa e ajustar para 0 se for o caso
     this.pontuacao = Math.max(0, pontuacao);
-    JogadoresController.calculaClassificacao();
+    console.log(pontuacao)
     
+    const jogadoresOrdenados = JogadoresDAO.listar().sort((a, b) => b.pontuacao - a.pontuacao);
+        
+    for (let i = 0; i < jogadoresOrdenados.length; i++) {
+        jogadoresOrdenados[i].classificacao = i + 1;
+    }
+    
+   return jogadoresOrdenados;
+    
+  }
+
+  if(calculaEstatistica){
+    JogadoresController.newfunction();
   }
 }
 

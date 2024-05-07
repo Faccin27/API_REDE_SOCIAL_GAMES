@@ -16,28 +16,35 @@ class AmizadesController {
       res.status(500).json({ message: "Não foi possível criar uma amizade" });
   }
 
-// Lista todas as amizades (READ)
-list(req, res) {
-  // Copia o array de amizades
-  let listaAmizades = AmizadesDAO.listar().slice();
-  
-  // Faz o response para o browser
-  if (listaAmizades.length === 0) {
-    res.status(200).json({ message: "Nenhuma amizade encontrada" });
-  } else {
+  list(req, res) {
     // Verifica se há uma ID de jogador na requisição
-    const jogadorId = req.query.jogadorId;
-    if (jogadorId) {
-      // Retorna apenas os amigos do jogador especificado
-      const amigosDoJogador = this.listarAmigosPorId(jogadorId);
-      res.status(200).json({ amigos: amigosDoJogador });
-    } else {
-      // Retorna a lista de amizades com os detalhes dos amigos
+    const jogadorId = req.query.jogador_id;
+    
+    // Obtém a lista de todas as amizades
+    const listaAmizades = AmizadesDAO.listar();
+  
+    // Se não houver ID de jogador, retorna a lista completa de amizades
+    if (!jogadorId) {
       const amizadesVerbose = listaAmizades.map(amizade => amizade.verbose());
-      res.status(200).json({ amizades: amizadesVerbose });
+      return res.status(200).json({ amizades: amizadesVerbose });
+    }
+  
+    // Filtra as amizades para encontrar todas as amizades do jogador especificado
+    const amizadesDoJogador = listaAmizades.filter(amizade =>
+      amizade.amigos.includes(parseInt(jogadorId))
+    );
+  
+    // Verifica se foram encontradas amizades para o jogador especificado
+    if (amizadesDoJogador.length === 0) {
+      return res.status(200).json({ message: "Nenhum amigo encontrado para o jogador especificado" });
+    } else {
+      // Obtém os detalhes completos das amizades utilizando o método verbose()
+      const amizadesVerbose = amizadesDoJogador.map(amizade => amizade.verbose());
+      return res.status(200).json({ amizades: amizadesVerbose });
     }
   }
-}
+  
+  
 
 
   // Mostrar uma amizade (READ)

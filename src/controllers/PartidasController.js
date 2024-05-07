@@ -28,7 +28,7 @@ class PartidasController {
         for (let index = 0; index < jogadoresPerdedores.length; index++) {
           let jogador = JogadoresDAO.buscarPorId(jogadoresPerdedores[index])
           let estatisticas = EstatisticasDAO.buscarPorId(jogador.estatisticas)
-           // Para cada jogador vencedor, chama a função partidaGanha
+           // Para cada jogador PERDEDOR, chama funcao partidaPerdida
           estatisticas.partidaPerdida();
       }
     }
@@ -39,25 +39,23 @@ class PartidasController {
     }
   }
 
+
   // Lista todas as partidas (READ)
   list(req, res) {
-    // Copia o array de amizades
-    let listaAmizades = AmizadesDAO.listar().slice();
-    
-
-    if (listaAmizades.length === 0)
-      res.status(200).json({ message: "Nenhuma amizade encontrada" });
-    else {
-      const jogadorId = req.query.jogadorId;
-      if (jogadorId) {
-        const amigosDoJogador = this.listarAmigosPorId(jogadorId);
-        res.status(200).json({ amigos: amigosDoJogador });
-      } else {
-        res.status(200).json({ amizades: listaAmizades });
-      }
+    // Copia o array de partidas
+    let listaPartidas = PartidasDAO.listar().slice();
+  
+    // Verifica se há partidas na lista
+    if (listaPartidas.length === 0) {
+      res.status(200).json({ message: "Nenhuma partida encontrada" });
+    } else {
+      // Cria uma nova lista com as partidas verbosas
+      let partidasVerbose = listaPartidas.map(partida => partida.verbose());
+  
+      // Faz o response para o browser
+      res.status(200).json({ partidas: partidasVerbose });
     }
   }
-
   // Mostrar uma partida (READ)
   show(req, res) {
     let id = req.params.id;
