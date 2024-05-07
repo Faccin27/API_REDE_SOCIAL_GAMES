@@ -1,5 +1,6 @@
 const Estatistica = require("../models/estatistica")
 const EstatisticasDAO = require('../models/dao/EstatisticasDAO');
+const JogadoresController = require("../controllers/JogadoresController");
 
 
 class EstatisticasController {

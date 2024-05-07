@@ -55,25 +55,34 @@ class JogadoresController {
   }
 
   listarTopJogadores(req, res) {
-    // Ordena os jogadores pelo valor da classificação em ordem decrescente
-    const jogadoresOrdenados = JogadoresDAO.listar().slice().sort((a, b) => a.classificacao - b.classificacao);
-
-    // Limita a lista aos 10 primeiros jogadores
-    const top10Jogadores = jogadoresOrdenados.slice(0, 10);  // recorta entre 0 e 10
-
-    const listaTopJogadores = [];
-    for (let i = 0; i < top10Jogadores.length; i++) {
-      const jogador = top10Jogadores[i];
-      listaTopJogadores.push({
-        id: jogador.id,
-        nickName: jogador.nickName,
-        classificacao: jogador.classificacao,
-        pontuacao: jogador.estatisticas 
-      });
+    // Obtém a lista de jogadores
+    const jogadores = JogadoresDAO.listar();
+  
+    // Ordena os jogadores pelo valor da pontuação em ordem decrescente
+    const jogadoresOrdenadosPorPontuacao = jogadores.slice().sort((a, b) => b.estatisticas.pontuacao - a.estatisticas.pontuacao);
+  
+    // Atualiza a classificação dos jogadores com base na pontuação
+    for (let i = 0; i < jogadoresOrdenadosPorPontuacao.length; i++) {
+      jogadoresOrdenadosPorPontuacao[i].classificacao = i + 1; // Classificação começa em 1
     }
-
-    res.status(200).json({top10: listaTopJogadores});
+  
+    // Limita a lista aos 10 primeiros jogadores
+    const top10Jogadores = jogadoresOrdenadosPorPontuacao.slice(0, 10);
+  
+    // Cria a lista de resposta com os dados dos top 10 jogadores
+    const listaTopJogadores = top10Jogadores.map(jogador => ({
+      id: jogador.id,
+      nickName: jogador.nickName,
+      classificacao: jogador.classificacao,
+      pontuacao: jogador.estatisticas
+    }));
+  
+    // Envia a resposta com os top 10 jogadores e suas classificações atualizadas
+    res.status(200).json({ top10: listaTopJogadores });
   }
+  
+
+
 
   // Mostrar um jogador (READ)
   show(req, res) {
@@ -137,7 +146,13 @@ class JogadoresController {
   }
 
   calculaClassificacao(){
-    console.log("test")
+    const jogadoresOrdenados = JogadoresDAO.listar().sort((a, b) => b.pontuacao - a.pontuacao);
+        
+    for (let i = 0; i < jogadoresOrdenados.length; i++) {
+        jogadoresOrdenados[i].classificacao = i + 1;
+    }
+    
+   return jogadoresOrdenados;
 
   }
 }

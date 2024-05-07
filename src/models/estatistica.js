@@ -1,5 +1,5 @@
+const { calculaClassificacao } = require("../controllers/JogadoresController");
 const JogadoresController = require("../controllers/JogadoresController");
-
 
 class Estatisticas {
   constructor({ id, pontuacao, jogosJogados, jogosVencidos, jogosPerdidos }) {
@@ -13,11 +13,13 @@ class Estatisticas {
   partidaGanha() {
     this.jogosVencidos++;
     this.calculaEstatistica();
+    calculaClassificacao();
   }
 
   partidaPerdida() {
     this.jogosPerdidos++;
     this.calculaEstatistica();
+    calculaClassificacao();
   }
 
   calculaEstatistica() {
@@ -32,13 +34,7 @@ class Estatisticas {
     this.pontuacao = Math.max(0, pontuacao);
     console.log(pontuacao)
     
-    const jogadoresOrdenados = JogadoresDAO.listar().sort((a, b) => b.pontuacao - a.pontuacao);
-        
-    for (let i = 0; i < jogadoresOrdenados.length; i++) {
-        jogadoresOrdenados[i].classificacao = i + 1;
-    }
-    
-   return jogadoresOrdenados;
+
     
   }
 

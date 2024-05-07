@@ -4,6 +4,8 @@ const JogadoresController = require('../../controllers/JogadoresController')
 
 // Vetor de Mensagens
 let mensagens = [
+  new Mensagem({ id: 1, texto: "Oi, tudo bem?", data_hora: new Date(), id_remetente: 3, id_destinatario: 13 }),
+  new Mensagem({ id: 2, texto: "Oi, tudo bem?", data_hora: new Date(), id_remetente: 4, id_destinatario: 11 }),
   new Mensagem({ id: 3, texto: "Oi, tudo bem?", data_hora: new Date(), id_remetente: 1, id_destinatario: 3 }),
   new Mensagem({ id: 4, texto: "Sim, estou bem. E você?", data_hora: new Date(), id_remetente: 3, id_destinatario: 1 }),
   new Mensagem({ id: 5, texto: "Estou ótimo, obrigado!", data_hora: new Date(), id_remetente: 1, id_destinatario: 4 }),
