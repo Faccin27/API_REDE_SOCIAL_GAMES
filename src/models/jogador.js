@@ -1,6 +1,7 @@
 const Estatistica = require("../models/estatistica")
 const EstatisticasDAO = require('../models/dao/EstatisticasDAO');
 const ConquistasDAO = require('../models/dao/ConquistasDAO');
+const JogadoresController = require('../controllers/JogadoresController');
 
 class Jogador {
   // Construtur da classe Jogador. Recebe um objeto com todas as propriedades do objeto

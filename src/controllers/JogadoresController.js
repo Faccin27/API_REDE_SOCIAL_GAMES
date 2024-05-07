@@ -135,8 +135,7 @@ class JogadoresController {
   calculaClassificacao(){
         
         const jogadoresOrdenados = JogadoresDAO.listar().sort((a, b) => b.pontuacao - a.pontuacao);
-    
-        
+
         for (let i = 0; i < jogadoresOrdenados.length; i++) {
             jogadoresOrdenados[i].classificacao = i + 1;
         }
